@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-vars */
+import { useDispatch, useSelector } from "react-redux";
 
 import LinkButton from "../../ui/LinkButton";
 import Button from "../../ui/Button";
 import CartItem from "./CartItem";
-import { useSelector } from "react-redux";
+import { clearCart, getCart } from "./cartSlice";
+import EmptyCart from "./EmptyCart";
 
 const fakeCart = [
   {
@@ -30,9 +32,10 @@ const fakeCart = [
 ];
 
 function Cart() {
-  const cart = fakeCart;
   const username = useSelector((state) => state.user.username);
-
+  const cart = useSelector(getCart);
+  const dispatch = useDispatch();
+  if (cart.length === 0) return <EmptyCart />;
   return (
     <div className="px-4 py-3">
       <LinkButton to="/menu">&larr; Back to menu</LinkButton>
@@ -48,7 +51,9 @@ function Cart() {
         <Button to="/order/new" type="primary">
           Order pizzas
         </Button>
-        <Button type="secondary">Clear cart</Button>
+        <Button type="secondary" onClick={() => dispatch(clearCart())}>
+          Clear cart
+        </Button>
       </div>
     </div>
   );
